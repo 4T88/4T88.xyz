@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4T88's Links</title>
+    <link rel="icon" href="image-removebg-preview(3).png" type="image/png">
+    <style>
+        :root {
+            --color-background-fallback: #000000;
+            --color-primary-text: #e0e0e0;
+            --color-accent-link: #445221;
+            --color-popup-bg: #333333;
+            --color-popup-text: #e0e0e0;
+        }
+
+        body {
+            background-color: var(--color-background-fallback);
+            background-image: url('https://media.discordapp.net/attachments/1387457302763798674/1396761126724702389/background.gif?ex=687f42ab&is=687df12b&hm=fff37d906c2f567ec0d0493a1462d33c4e42f0b7c76fc0d7920ca9020db940a5&=&width=576&height=432');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            color: var(--color-primary-text);
+            font-family: monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 300px;
+            width: 100%;
+            background-color: rgba(34, 34, 34, 0.7);
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .name {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--color-primary-text);
+        }
+
+        .link-item {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--color-accent-link);
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 2px 0;
+            cursor: pointer;
+        }
+
+        .link-item:hover,
+        .link-item:focus {
+            color: var(--color-background-fallback);
+            background-color: var(--color-accent-link);
+            outline: none;
+        }
+
+        .popup {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-popup-bg);
+            color: var(--color-popup-text);
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        .popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="name">4T88</div>
+        <a href="https://t.me/T480001" target="_blank" rel="noopener noreferrer" class="link-item">telegram</a>
+        <a href="https://github.com/4T88" target="_blank" rel="noopener noreferrer" class="link-item">github</a>
+        <a id="discord-link" class="link-item">discord</a>
+        <a href="https://signal.me/#eu/SgtT32M3OvNqKcqsZQY0YyLgE8tBskPO3Ziv9EXUMgnyvgyUIG5HEIzYdN6UuqoA" target="_blank" rel="noopener noreferrer" class="link-item">signal</a>
+        <a href="mailto:contact@4t88.xyz" class="link-item">email</a>
+    </div>
+
+    <div id="copy-popup" class="popup">
+        copied to clipboard
+    </div>
+
+    <script>
+        document.getElementById('discord-link').addEventListener('click', function(event) {
+            event.preventDefault();
+            const textToCopy = '4t88';
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            const popup = document.getElementById('copy-popup');
+            popup.classList.add('show');
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
