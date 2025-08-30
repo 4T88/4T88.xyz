@@ -3,1148 +3,519 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4T88.xyz</title>
-    <link rel="icon" href="favicon.png" type="image/png">
+    <title>4T88 - Contact</title>
     <style>
-        body {
-            background: #000;
-            color: #fff;
-            font-family: monospace;
-            font-size: 14px;
+        * {
             margin: 0;
             padding: 0;
-            text-align: center;
-            cursor: none !important;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
             min-height: 100vh;
-        }
-
-        * {
-            cursor: none !important;
-        }
-
-        .animated-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 1;
-            background: #000;
-        }
-
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            transition: opacity 0.5s ease;
-        }
-
-        .loading-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loading-bar {
-            width: 200px;
-            height: 2px;
-            background: #222;
-            border-radius: 1px;
             overflow: hidden;
-            margin-bottom: 20px;
-        }
-
-        .loading-progress {
-            height: 100%;
-            background: #fff;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .loading-percentage {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .click-to-enter {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            cursor: pointer;
-            transition: opacity 0.5s ease;
-        }
-
-        .click-to-enter.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .enter-text {
-            font-size: 18px;
-            margin-bottom: 10px;
-            animation: pulse 2s infinite ease-in-out;
-        }
-
-        .enter-subtitle {
-            font-size: 12px;
-            color: #666;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        .eye-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 100;
-            cursor: pointer;
-            transition: opacity 1s ease;
-        }
-
-        .eye-container.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .eye {
-            width: 150px;
-            height: 80px;
-            border: 4px solid #fff;
-            border-radius: 75px;
             position: relative;
+            color: #ffffff;
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .center-name {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            position: relative;
+            z-index: 20;
+            letter-spacing: 2px;
+        }
+
+        .center-name:hover {
+            transform: scale(1.05);
+            color: #f5f5f5;
+        }
+
+        .center-name.expanded {
+            transform: scale(0.85);
+            opacity: 0.7;
+        }
+
+        .neural-links {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 15;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .neural-links.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .neural-node {
+            position: absolute;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: all;
+            backdrop-filter: blur(10px);
+        }
+
+        .neural-node:hover {
+            transform: scale(1.2);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .neural-node img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            filter: brightness(0.9);
             transition: all 0.3s ease;
-            background: radial-gradient(ellipse at center, #1a1a1a 20%, #000 80%);
-            overflow: hidden;
-            box-shadow: 
-                inset 0 0 30px rgba(255, 255, 255, 0.1),
-                0 0 25px rgba(255, 255, 255, 0.2),
-                0 0 50px rgba(255, 255, 255, 0.1);
         }
 
-        .eye.dormant {
-            border-color: #555;
-            box-shadow: 
-                inset 0 0 20px rgba(255, 255, 255, 0.05),
-                0 0 15px rgba(255, 255, 255, 0.1);
+        .neural-node:hover img {
+            filter: brightness(1.1);
+            transform: scale(1.1);
         }
 
-        .eye.dormant .iris {
-            background: radial-gradient(circle at 30% 20%, #333, #222, #111);
-            border-color: #222;
+        .neural-node.pulse {
+            animation: subtlePulse 3s ease-in-out infinite;
         }
 
-        .eye.dormant .highlight {
-            opacity: 0.3;
-        }
-
-        .eye:hover:not(.dormant) {
-            border-color: #ccc;
-            transform: scale(1.08);
-            box-shadow: 
-                inset 0 0 40px rgba(255, 255, 255, 0.15),
-                0 0 30px rgba(255, 255, 255, 0.3),
-                0 0 60px rgba(255, 255, 255, 0.2);
-        }
-
-        .eye.awakening {
-            animation: awaken 1s ease-out forwards;
-        }
-
-        @keyframes awaken {
-            0% {
-                border-color: #555;
-                box-shadow: 
-                    inset 0 0 20px rgba(255, 255, 255, 0.05),
-                    0 0 15px rgba(255, 255, 255, 0.1);
+        @keyframes subtlePulse {
+            0%, 100% {
+                border-color: rgba(255, 255, 255, 0.15);
+                background: rgba(255, 255, 255, 0.08);
             }
             50% {
-                border-color: #aaa;
-                box-shadow: 
-                    inset 0 0 35px rgba(255, 255, 255, 0.12),
-                    0 0 30px rgba(255, 255, 255, 0.25);
-            }
-            100% {
-                border-color: #fff;
-                box-shadow: 
-                    inset 0 0 30px rgba(255, 255, 255, 0.1),
-                    0 0 25px rgba(255, 255, 255, 0.2),
-                    0 0 50px rgba(255, 255, 255, 0.1);
+                border-color: rgba(255, 255, 255, 0.25);
+                background: rgba(255, 255, 255, 0.12);
             }
         }
 
-        .iris {
-            width: 50px;
-            height: 50px;
-            background: radial-gradient(circle at 30% 20%, #666, #333, #111);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
+        .info-panel {
+            position: fixed;
+            top: 30px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.1s ease-out;
-            border: 2px solid #444;
-            box-shadow: 
-                inset 0 0 15px rgba(0, 0, 0, 0.8),
-                0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
-        .iris.awakening {
-            animation: iris-awaken 1s ease-out forwards;
-        }
-
-        @keyframes iris-awaken {
-            0% {
-                background: radial-gradient(circle at 30% 20%, #333, #222, #111);
-                border-color: #222;
-            }
-            100% {
-                background: radial-gradient(circle at 30% 20%, #666, #333, #111);
-                border-color: #444;
-            }
-        }
-
-        .pupil {
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle at 35% 25%, #111, #000);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.1s ease-out;
-            box-shadow: inset 0 0 8px rgba(0, 0, 0, 1);
-        }
-
-        .highlight {
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-            position: absolute;
-            top: 30%;
-            left: 30%;
-            transition: all 0.3s ease-out;
-            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
-        }
-
-        .highlight.awakening {
-            animation: highlight-awaken 1s ease-out forwards;
-        }
-
-        .eye-text {
-            position: absolute;
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
-            color: #999;
-            opacity: 1;
-            transition: all 0.5s ease;
-            font-style: italic;
-            white-space: nowrap;
-            animation: pulse-text 2s infinite ease-in-out;
-            z-index: 1000;
-        }
-
-        .eye-text.awake {
-            color: #ccc;
-            opacity: 1;
-        }
-
-        @keyframes pulse-text {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
-        }
-
-        .eyelid-top, .eyelid-bottom {
-            position: absolute;
-            left: -5px;
-            width: calc(100% + 10px);
-            height: 50%;
-            background: linear-gradient(to bottom, #000 0%, #111 50%, #000 100%);
-            border-radius: 80px;
-            transition: all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
-            z-index: 10;
-            box-shadow: 
-                inset 0 0 20px rgba(0, 0, 0, 0.8),
-                0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .eyelid-top, .eyelid-bottom {
-            position: absolute;
-            left: -10px;
-            width: calc(100% + 20px);
-            height: 55%;
-            background: linear-gradient(to bottom, 
-                #1a1a1a 0%, 
-                #2a2a2a 20%, 
-                #1a1a1a 50%, 
-                #0a0a0a 80%, 
-                #000 100%);
-            border-radius: 100px;
-            transition: all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
-            z-index: 10;
-            box-shadow: 
-                inset 0 0 30px rgba(0, 0, 0, 0.9),
-                inset 0 0 60px rgba(0, 0, 0, 0.6),
-                0 3px 15px rgba(0, 0, 0, 0.8);
-        }
-
-        .eyelid-top {
-            top: -10px;
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-            transform: translateY(50px);
-            background: linear-gradient(to bottom, 
-                #000 0%, 
-                #0a0a0a 20%, 
-                #1a1a1a 50%, 
-                #2a2a2a 80%, 
-                #1a1a1a 100%);
-        }
-
-        .eyelid-bottom {
-            bottom: -10px;
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            transform: translateY(-50px);
-        }
-
-        .eye.dormant .eyelid-top {
-            transform: translateY(50px);
-        }
-
-        .eye.dormant .eyelid-bottom {
-            transform: translateY(-50px);
-        }
-
-        .eye.awakening .eyelid-top {
-            animation: eyelids-open 1.2s ease-out forwards;
-        }
-
-        .eye.awakening .eyelid-bottom {
-            animation: eyelids-open-bottom 1.2s ease-out forwards;
-        }
-
-        @keyframes eyelids-open {
-            0% {
-                transform: translateY(50px);
-            }
-            100% {
-                transform: translateY(-120%);
-            }
-        }
-
-        @keyframes eyelids-open-bottom {
-            0% {
-                transform: translateY(-50px);
-            }
-            100% {
-                transform: translateY(120%);
-            }
-        }
-
-        .eye.opening .eyelid-top {
-            transform: translateY(-120%);
-        }
-
-        .eye.opening .eyelid-bottom {
-            transform: translateY(120%);
-        }
-
-        .eye.opening .iris {
-            transform: translate(-50%, -50%) scale(1.3);
-            border-color: #666;
-        }
-
-        .eye.opening .pupil {
-            transform: translate(-50%, -50%) scale(0.6);
-        }
-
-        .eye.opening .highlight {
-            opacity: 1;
-            transform: scale(1.5);
-        }
-
-        .main-content {
+            transform: translateX(-50%) translateY(-80px);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 16px 24px;
+            backdrop-filter: blur(20px);
             opacity: 0;
-            transition: opacity 1.5s ease;
-            z-index: 10;
-            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 25;
+            pointer-events: none;
+            max-width: 320px;
         }
 
-        .main-content.visible {
+        .info-panel.visible {
             opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
-        .content-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+        .info-title {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 4px;
         }
 
-        .name {
-            margin-bottom: 30px;
-            font-size: 32px;
-            font-weight: 300;
-            color: #f0f0f0;
-            font-family: 'Consolas', 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Droid Sans Mono', 'Source Code Pro', monospace;
-            letter-spacing: 4px;
+        .info-desc {
+            color: #cccccc;
+            font-size: 0.85rem;
+            line-height: 1.3;
         }
-        
-        a {
-            color: #fff;
-            text-decoration: none;
-            display: block;
-            margin: 10px 0;
-            transition: all 0.3s ease;
-            position: relative;
-            padding: 5px 10px;
-        }
-        
-        a::before {
-            content: '';
-            position: absolute;
+
+        .connections-canvas {
+            position: fixed;
+            top: 0;
             left: 0;
-            bottom: 0;
-            width: 0;
-            height: 1px;
-            background: #fff;
-            transition: width 0.3s ease;
-        }
-        
-        a::after {
-            content: '>';
-            position: absolute;
-            left: -20px;
-            top: 5px;
-            opacity: 0;
-            transition: all 0.3s ease;
-            color: #888;
-        }
-        
-        a:hover {
-            color: #ccc;
-            padding-left: 25px;
-        }
-        
-        a:hover::before {
-            width: 100%;
-        }
-        
-        a:hover::after {
-            opacity: 1;
-            left: 0px;
-        }
-
-        .cursor {
-            position: fixed;
-            width: 16px;
-            height: 16px;
-            background: rgba(255, 255, 255, 0.9) !important;
-            border: 2px solid rgba(0, 0, 0, 0.8) !important;
-            border-radius: 50%;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
-            z-index: 1001;
-            transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            backdrop-filter: blur(1px);
-            box-shadow: 
-                0 0 8px rgba(255, 255, 255, 0.6),
-                0 0 16px rgba(255, 255, 255, 0.3) !important;
+            z-index: 5;
         }
 
-        .cursor-trail {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.4);
-            border: 1px solid rgba(0, 0, 0, 0.3);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1000;
-            transition: opacity 0.2s ease;
+        @keyframes expandRing {
+            0% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
         }
 
-        .popup {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: #fff;
-            padding: 8px 15px;
-            font-size: 12px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
+        .activation-ring {
+            animation: expandRing 0.5s ease-out forwards;
         }
 
-        .popup.show {
-            opacity: 1;
-            visibility: visible;
+        @media (max-width: 768px) {
+            .center-name {
+                font-size: 3rem;
+                letter-spacing: 1px;
+            }
+            
+            .neural-node {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .neural-node img {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .info-panel {
+                max-width: 280px;
+                margin: 0 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <canvas class="animated-bg" id="animated-bg"></canvas>
+    <div class="grid-bg"></div>
+    <canvas class="connections-canvas" id="connections"></canvas>
 
-    <div class="loading-screen" id="loading-screen">
-        <div class="loading-bar">
-            <div class="loading-progress" id="loading-progress"></div>
-        </div>
-        <div class="loading-percentage" id="loading-percentage">0%</div>
+    <div class="container">
+        <div class="center-name" id="centerName">4T88</div>
     </div>
 
-    <div class="click-to-enter" id="click-to-enter">
-        <div class="enter-text">click to enter</div>
-        <div class="enter-subtitle">audio enabled</div>
-    </div>
-
-    <div class="eye-container" id="eye-container">
-        <div class="eye" id="eye">
-            <div class="iris" id="iris">
-                <div class="pupil" id="pupil">
-                    <div class="highlight" id="highlight"></div>
-                </div>
-            </div>
-            <div class="eyelid-top"></div>
-            <div class="eyelid-bottom"></div>
-        </div>
-        <div class="eye-text" id="eye-text">click me</div>
-    </div>
-
-    <div class="cursor" id="cursor"></div>
-    
-    <div class="main-content" id="main-content">
-        <div class="content-container">
-            <div class="name" id="title">4T88</div>
-            
-            <a href="https://t.me/T480001" target="_blank" rel="noopener noreferrer">telegram</a>
-            <a href="https://github.com/4T88" target="_blank" rel="noopener noreferrer">github</a>
-            <a id="discord-link" style="cursor: pointer;">discord</a>
-            <a href="https://signal.me/#eu/SgtT32M3OvNqKcqsZQY0YyLgE8tBskPO3Ziv9EXUMgnyvgyUIG5HEIzYdN6UuqoA" target="_blank" rel="noopener noreferrer">signal</a>
-            <a href="mailto:contact@4t88.xyz">email</a>
-        </div>
-    </div>
-
-    <div id="copy-popup" class="popup">
-        copied to clipboard
+    <div class="neural-links" id="neuralLinks"></div>
+    <div class="info-panel" id="infoPanel">
+        <div class="info-title" id="infoTitle"></div>
+        <div class="info-desc" id="infoDesc"></div>
     </div>
 
     <script>
-        let audioContext;
-        let isAudioEnabled = false;
+        class ContactSystem {
+            constructor() {
+                this.centerName = document.getElementById('centerName');
+                this.neuralLinks = document.getElementById('neuralLinks');
+                this.infoPanel = document.getElementById('infoPanel');
+                this.infoTitle = document.getElementById('infoTitle');
+                this.infoDesc = document.getElementById('infoDesc');
+                
+                this.isExpanded = false;
+                this.nodes = [];
+                
+                this.connectionsCanvas = document.getElementById('connections');
+                this.connectionsCtx = this.connectionsCanvas.getContext('2d');
+                this.animationFrame = null;
+                
+                this.socialLinks = [
+                    { 
+                        id: 'telegram', 
+                        favicon: 'data:image/svg+xml,%3Csvg fill=%22%23dadada%22 viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22m20.665 3.717-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15 4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z%22/%3E%3C/svg%3E',
+                        title: 'telegram',
+                        desc: 'hit me up for quick chats - @t480001',
+                        action: () => window.open('https://t.me/T480001', '_blank')
+                    },
+                    { 
+                        id: 'github', 
+                        favicon: 'data:image/svg+xml,%3Csvg viewBox=%220 0 24 24%22 fill=%22%23dadada%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z%22/%3E%3C/svg%3E',
+                        title: 'github',
+                        desc: 'check out my code and projects - /4t88',
+                        action: () => window.open('https://github.com/4T88', '_blank')
+                    },
+                    { 
+                        id: 'discord', 
+                        favicon: 'data:image/svg+xml,%3Csvg viewBox=%220 0 24 24%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M18.8944 4.34399C17.5184 3.71467 16.057 3.256 14.5317 3C14.3397 3.33067 14.1263 3.77866 13.977 4.13067C12.3546 3.89599 10.7439 3.89599 9.14394 4.13067C8.9946 3.77866 8.77059 3.33067 8.58925 3C7.05328 3.256 5.59194 3.71467 4.22555 4.34399C1.46289 8.41865 0.716219 12.3973 1.08955 16.3226C2.92421 17.6559 4.6949 18.4666 6.43463 19C6.86129 18.424 7.2453 17.8053 7.57597 17.1546C6.94663 16.92 6.3493 16.632 5.7733 16.2906C5.92263 16.184 6.07197 16.0667 6.21064 15.9493C9.68796 17.5387 13.4544 17.5387 16.889 15.9493C17.0383 16.0667 17.177 16.184 17.3263 16.2906C16.7503 16.632 16.153 16.92 15.5237 17.1546C15.8543 17.8053 16.2384 18.424 16.665 19C18.4037 18.4666 20.185 17.6559 22.0101 16.3226C22.4687 11.7787 21.2837 7.83202 18.8944 4.34399ZM8.05596 13.9013C7.01061 13.9013 6.15728 12.952 6.15728 11.7893C6.15728 10.6267 6.98928 9.67731 8.05596 9.67731C9.11194 9.67731 9.97591 10.6267 9.95457 11.7893C9.95457 12.952 9.11194 13.9013 8.05596 13.9013ZM15.065 13.9013C14.0197 13.9013 13.1653 12.952 13.1653 11.7893C13.1653 10.6267 13.9983 9.67731 15.065 9.67731C16.121 9.67731 16.985 10.6267 16.9637 11.7893C16.9637 12.952 16.1317 13.9013 15.065 13.9013Z%22 fill=%22%23dadada%22/%3E%3C/svg%3E',
+                        title: 'discord',
+                        desc: 'gaming and random chats - 4t88',
+                        action: () => this.copyToClipboard('4t88')
+                    },
+                    { 
+                        id: 'signal', 
+                        favicon: 'data:image/svg+xml,%3Csvg fill=%22%23dadada%22 viewBox=%220 0 32 32%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M16 3.816c-6.726 0.004-12.178 5.457-12.178 12.184 0 2.404 0.696 4.645 1.897 6.533l-0.029-0.049-1.172 4.999 4.999-1.172c1.841 1.176 4.086 1.874 6.493 1.874 6.729 0 12.184-5.455 12.184-12.184s-5.455-12.184-12.184-12.184c-0.004 0-0.007 0-0.011 0h0.001z%22/%3E%3C/svg%3E',
+                        title: 'signal',
+                        desc: 'for the really private stuff',
+                        action: () => window.open('https://signal.me/#eu/T480001', '_blank')
+                    },
+                    { 
+                        id: 'email', 
+                        favicon: 'data:image/svg+xml,%3Csvg viewBox=%220 0 24 24%22 fill=%22%23dadada%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z%22/%3E%3C/svg%3E',
+                        title: 'email',
+                        desc: 'old school but works - contact@4t88.xyz',
+                        action: () => window.open('mailto:contact@4t88.xyz', '_blank')
+                    }
+                ];
+                
+                this.init();
+            }
 
-        // Creative background pattern
-        function initializeBackground() {
-            const canvas = document.getElementById('animated-bg');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            const elements = [];
-            const elementCount = 120;
-            const eyeCenterX = window.innerWidth / 2;
-            const eyeCenterY = window.innerHeight / 2;
-            
-            // Create diverse background elements that spawn from eye center
-            for (let i = 0; i < elementCount; i++) {
-                const type = Math.random();
-                const isWhite = Math.random() > 0.7;
+            init() {
+                this.setupCanvas();
+                this.bindEvents();
+            }
+
+            setupCanvas() {
+                const resize = () => {
+                    this.connectionsCanvas.width = window.innerWidth;
+                    this.connectionsCanvas.height = window.innerHeight;
+                };
+                resize();
+                window.addEventListener('resize', resize);
+            }
+
+            bindEvents() {
+                this.centerName.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.toggleNetwork();
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (this.isExpanded && !e.target.closest('.neural-node') && e.target !== this.centerName) {
+                        this.closeNetwork();
+                    }
+                });
+            }
+
+            toggleNetwork() {
+                if (this.isExpanded) {
+                    this.closeNetwork();
+                } else {
+                    this.openNetwork();
+                }
+            }
+
+            openNetwork() {
+                this.isExpanded = true;
+                this.centerName.classList.add('expanded');
                 
-                // Random angle and distance from eye
-                const angle = Math.random() * Math.PI * 2;
-                const startDistance = Math.random() * 100 + 50;
-                const maxDistance = Math.sqrt(Math.pow(canvas.width, 2) + Math.pow(canvas.height, 2));
+                this.createNodes();
                 
-                const baseX = eyeCenterX + Math.cos(angle) * startDistance;
-                const baseY = eyeCenterY + Math.sin(angle) * startDistance;
+                setTimeout(() => {
+                    this.neuralLinks.classList.add('active');
+                    this.startAnimation();
+                }, 200);
+            }
+
+            closeNetwork() {
+                this.isExpanded = false;
+                this.centerName.classList.remove('expanded');
+                this.neuralLinks.classList.remove('active');
+                this.infoPanel.classList.remove('visible');
                 
-                if (type < 0.3) {
-                    // Dots
-                    elements.push({
-                        type: 'dot',
-                        x: baseX,
-                        y: baseY,
-                        originX: eyeCenterX,
-                        originY: eyeCenterY,
-                        size: Math.random() * 3 + 1,
-                        color: isWhite ? 'rgba(255, 255, 255, 0.4)' : 'rgba(140, 140, 140, 0.3)',
-                        speedX: Math.cos(angle) * (0.1 + Math.random() * 0.3),
-                        speedY: Math.sin(angle) * (0.1 + Math.random() * 0.3),
-                        life: 0,
-                        maxLife: Math.random() * 1000 + 500,
-                        angle: angle
+                this.stopAnimation();
+                
+                setTimeout(() => {
+                    this.neuralLinks.innerHTML = '';
+                    this.nodes = [];
+                }, 300);
+            }
+
+            createNodes() {
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const radius = Math.min(window.innerWidth, window.innerHeight) * 0.28;
+                
+                this.socialLinks.forEach((link, index) => {
+                    const angle = (index * 2 * Math.PI) / this.socialLinks.length - Math.PI / 2;
+                    const x = centerX + Math.cos(angle) * radius - 36;
+                    const y = centerY + Math.sin(angle) * radius - 36;
+                    
+                    const node = document.createElement('div');
+                    node.className = 'neural-node pulse';
+                    node.style.left = x + 'px';
+                    node.style.top = y + 'px';
+                    node.style.animationDelay = (index * 0.2) + 's';
+                    
+                    const icon = document.createElement('img');
+                    icon.src = link.favicon;
+                    icon.alt = link.id;
+                    icon.onerror = () => { icon.style.display = 'none'; };
+                    
+                    node.appendChild(icon);
+                    
+                    node.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.activateNode(node, link);
                     });
-                } else if (type < 0.6) {
-                    // Hexagons
-                    elements.push({
-                        type: 'hexagon',
-                        x: baseX,
-                        y: baseY,
-                        originX: eyeCenterX,
-                        originY: eyeCenterY,
-                        size: Math.random() * 8 + 4,
-                        color: isWhite ? 'rgba(255, 255, 255, 0.5)' : 'rgba(160, 160, 160, 0.35)',
-                        rotation: Math.random() * Math.PI * 2,
-                        speedX: Math.cos(angle) * (0.08 + Math.random() * 0.2),
-                        speedY: Math.sin(angle) * (0.08 + Math.random() * 0.2),
-                        rotationSpeed: (Math.random() - 0.5) * 0.008,
-                        life: 0,
-                        maxLife: Math.random() * 1200 + 800,
-                        angle: angle
+                    
+                    node.addEventListener('mouseenter', () => {
+                        this.showInfo(link);
                     });
-                } else if (type < 0.8) {
-                    // Triangles
-                    elements.push({
-                        type: 'triangle',
-                        x: baseX,
-                        y: baseY,
-                        originX: eyeCenterX,
-                        originY: eyeCenterY,
-                        size: Math.random() * 6 + 3,
-                        color: isWhite ? 'rgba(255, 255, 255, 0.4)' : 'rgba(150, 150, 150, 0.25)',
-                        rotation: Math.random() * Math.PI * 2,
-                        speedX: Math.cos(angle) * (0.12 + Math.random() * 0.25),
-                        speedY: Math.sin(angle) * (0.12 + Math.random() * 0.25),
-                        rotationSpeed: (Math.random() - 0.5) * 0.01,
-                        life: 0,
-                        maxLife: Math.random() * 1000 + 600,
-                        angle: angle
+                    
+                    node.addEventListener('mouseleave', () => {
+                        this.hideInfo();
+                    });
+                    
+                    this.neuralLinks.appendChild(node);
+                    
+                    this.nodes.push({
+                        element: node,
+                        x: x + 36,
+                        y: y + 36,
+                        link: link
+                    });
+                });
+            }
+
+            activateNode(nodeElement, link) {
+                const ring = document.createElement('div');
+                ring.style.cssText = `
+                    position: fixed;
+                    left: ${nodeElement.offsetLeft}px;
+                    top: ${nodeElement.offsetTop}px;
+                    width: 72px;
+                    height: 72px;
+                    border: 2px solid rgba(255, 255, 255, 0.6);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 30;
+                `;
+                ring.className = 'activation-ring';
+                
+                document.body.appendChild(ring);
+                
+                setTimeout(() => {
+                    ring.remove();
+                    link.action();
+                }, 250);
+            }
+
+            showInfo(link) {
+                this.infoTitle.textContent = link.title;
+                this.infoDesc.textContent = link.desc;
+                this.infoPanel.classList.add('visible');
+            }
+
+            hideInfo() {
+                this.infoPanel.classList.remove('visible');
+            }
+
+            startAnimation() {
+                const animate = () => {
+                    if (!this.isExpanded) return;
+                    
+                    this.connectionsCtx.clearRect(0, 0, this.connectionsCanvas.width, this.connectionsCanvas.height);
+                    this.drawConnections();
+                    
+                    this.animationFrame = requestAnimationFrame(animate);
+                };
+                animate();
+            }
+
+            stopAnimation() {
+                if (this.animationFrame) {
+                    cancelAnimationFrame(this.animationFrame);
+                    this.animationFrame = null;
+                }
+                this.connectionsCtx.clearRect(0, 0, this.connectionsCanvas.width, this.connectionsCanvas.height);
+            }
+
+            drawConnections() {
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                
+                this.nodes.forEach((node) => {
+                    this.connectionsCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+                    this.connectionsCtx.lineWidth = 1;
+                    this.connectionsCtx.beginPath();
+                    this.connectionsCtx.moveTo(centerX, centerY);
+                    this.connectionsCtx.lineTo(node.x, node.y);
+                    this.connectionsCtx.stroke();
+                });
+            }
+
+            copyToClipboard(text) {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        this.showNotification('discord username copied');
                     });
                 } else {
-                    // Plus signs
-                    elements.push({
-                        type: 'plus',
-                        x: baseX,
-                        y: baseY,
-                        originX: eyeCenterX,
-                        originY: eyeCenterY,
-                        size: Math.random() * 5 + 2,
-                        color: isWhite ? 'rgba(255, 255, 255, 0.3)' : 'rgba(130, 130, 130, 0.2)',
-                        rotation: Math.random() * Math.PI / 2,
-                        speedX: Math.cos(angle) * (0.15 + Math.random() * 0.3),
-                        speedY: Math.sin(angle) * (0.15 + Math.random() * 0.3),
-                        rotationSpeed: (Math.random() - 0.5) * 0.01,
-                        life: 0,
-                        maxLife: Math.random() * 800 + 400,
-                        angle: angle
-                    });
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    this.showNotification('discord username copied');
                 }
             }
-            
-            function animateBackground() {
-                // Clear with black background
-                ctx.fillStyle = '#000';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            showNotification(message) {
+                const notification = document.createElement('div');
+                notification.textContent = message;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: rgba(0, 0, 0, 0.9);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    color: #ffffff;
+                    padding: 12px 18px;
+                    border-radius: 6px;
+                    backdrop-filter: blur(10px);
+                    font-family: 'Courier New', monospace;
+                    font-size: 0.9rem;
+                    z-index: 1000;
+                    transform: translateX(100%);
+                    transition: transform 0.3s ease;
+                    text-transform: lowercase;
+                `;
                 
-                elements.forEach((element, index) => {
-                    // Update life and position
-                    element.life += 1;
-                    element.x += element.speedX;
-                    element.y += element.speedY;
-                    if (element.rotationSpeed) element.rotation += element.rotationSpeed;
-                    
-                    // Calculate opacity based on life and distance from origin
-                    const distanceFromOrigin = Math.sqrt(
-                        Math.pow(element.x - element.originX, 2) + 
-                        Math.pow(element.y - element.originY, 2)
-                    );
-                    const lifeRatio = element.life / element.maxLife;
-                    const fadeOut = Math.max(0, 1 - lifeRatio);
-                    const currentOpacity = fadeOut * 0.8;
-                    
-                    // Respawn if life exceeded or out of bounds
-                    if (element.life > element.maxLife || 
-                        element.x < -100 || element.x > canvas.width + 100 ||
-                        element.y < -100 || element.y > canvas.height + 100) {
-                        
-                        // Reset element at eye center with new random direction
-                        const newAngle = Math.random() * Math.PI * 2;
-                        const startDistance = Math.random() * 50 + 20;
-                        element.x = element.originX + Math.cos(newAngle) * startDistance;
-                        element.y = element.originY + Math.sin(newAngle) * startDistance;
-                        element.angle = newAngle;
-                        element.speedX = Math.cos(newAngle) * (0.1 + Math.random() * 0.3);
-                        element.speedY = Math.sin(newAngle) * (0.1 + Math.random() * 0.3);
-                        element.life = 0;
-                        element.maxLife = Math.random() * 1000 + 500;
-                    }
-                    
-                    // Draw element with life-based opacity
-                    if (currentOpacity > 0.01) {
-                        ctx.save();
-                        ctx.translate(element.x, element.y);
-                        if (element.rotation) ctx.rotate(element.rotation);
-                        
-                        // Apply life-based opacity to color
-                        let color = element.color;
-                        if (color.includes('rgba')) {
-                            color = color.replace(/[\d\.]+\)$/g, currentOpacity + ')');
-                        }
-                        ctx.fillStyle = color;
-                        ctx.strokeStyle = color;
-                        
-                        switch (element.type) {
-                            case 'dot':
-                                ctx.beginPath();
-                                ctx.arc(0, 0, element.size, 0, Math.PI * 2);
-                                ctx.fill();
-                                break;
-                                
-                            case 'hexagon':
-                                ctx.beginPath();
-                                for (let i = 0; i < 6; i++) {
-                                    const angle = (i * Math.PI * 2) / 6;
-                                    const x = Math.cos(angle) * element.size;
-                                    const y = Math.sin(angle) * element.size;
-                                    if (i === 0) {
-                                        ctx.moveTo(x, y);
-                                    } else {
-                                        ctx.lineTo(x, y);
-                                    }
-                                }
-                                ctx.closePath();
-                                ctx.fill();
-                                break;
-                                
-                            case 'triangle':
-                                ctx.beginPath();
-                                ctx.moveTo(0, -element.size);
-                                ctx.lineTo(-element.size * 0.866, element.size * 0.5);
-                                ctx.lineTo(element.size * 0.866, element.size * 0.5);
-                                ctx.closePath();
-                                ctx.fill();
-                                break;
-                                
-                            case 'plus':
-                                const half = element.size / 2;
-                                const thickness = element.size / 4;
-                                ctx.fillRect(-half, -thickness, element.size, thickness * 2);
-                                ctx.fillRect(-thickness, -half, thickness * 2, element.size);
-                                break;
-                        }
-                        
-                        ctx.restore();
-                    }
-                });
+                document.body.appendChild(notification);
                 
-                requestAnimationFrame(animateBackground);
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(0)';
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 2500);
             }
-            
-            animateBackground();
-            
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                // Update origin points for all elements
-                const newEyeCenterX = window.innerWidth / 2;
-                const newEyeCenterY = window.innerHeight / 2;
-                elements.forEach(element => {
-                    element.originX = newEyeCenterX;
-                    element.originY = newEyeCenterY;
-                });
-            });
         }
 
-        // Loading screen functionality
-        function startLoading() {
-            const progressBar = document.getElementById('loading-progress');
-            const percentageText = document.getElementById('loading-percentage');
-            let progress = 0;
-            
-            const loadingInterval = setInterval(() => {
-                progress += Math.random() * 15;
-                if (progress > 100) progress = 100;
-                
-                progressBar.style.width = progress + '%';
-                percentageText.textContent = Math.floor(progress) + '%';
-                
-                if (progress >= 100) {
-                    clearInterval(loadingInterval);
-                    setTimeout(() => {
-                        document.getElementById('loading-screen').classList.add('hidden');
-                    }, 500);
-                }
-            }, 150);
-        }
-
-        // Click to enter functionality
-        document.getElementById('click-to-enter').addEventListener('click', function() {
-            // Initialize audio context
-            try {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                isAudioEnabled = true;
-            } catch (error) {
-                console.log('Audio not supported');
-            }
-            
-            this.classList.add('hidden');
-            // Show dormant eye and start tracking after entering
-            setTimeout(() => {
-                const eye = document.getElementById('eye');
-                const eyeText = document.getElementById('eye-text');
-                eye.classList.add('dormant');
-                // Text is already visible by default now
-                startEyeTracking();
-                initializeCursor();
-            }, 500);
+        document.addEventListener('DOMContentLoaded', () => {
+            new ContactSystem();
         });
-
-        // Eye tracking functionality
-        let eyeTrackingActive = false;
-        let eyeAwake = false;
-
-        function startEyeTracking() {
-            const iris = document.getElementById('iris');
-            const eye = document.getElementById('eye');
-            
-            function trackMouse(e) {
-                if (!eyeAwake) return;
-                
-                const eyeRect = eye.getBoundingClientRect();
-                const eyeCenterX = eyeRect.left + eyeRect.width / 2;
-                const eyeCenterY = eyeRect.top + eyeRect.height / 2;
-                
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                // Calculate angle and distance with improved responsiveness
-                const deltaX = mouseX - eyeCenterX;
-                const deltaY = mouseY - eyeCenterY;
-                const angle = Math.atan2(deltaY, deltaX);
-                const distance = Math.min(
-                    Math.sqrt(deltaX * deltaX + deltaY * deltaY) / 12,
-                    18
-                );
-                
-                // Calculate new iris position with smoother movement
-                const irisX = Math.cos(angle) * distance;
-                const irisY = Math.sin(angle) * distance * 0.6; // Restrict vertical movement
-                
-                // Apply movement with smooth interpolation
-                iris.style.transform = `translate(calc(-50% + ${irisX}px), calc(-50% + ${irisY}px))`;
-                
-                // Dynamic pupil response
-                const intensity = Math.min(distance / 15, 1);
-                const pupil = document.getElementById('pupil');
-                const pupilScale = 1 - intensity * 0.2;
-                pupil.style.transform = `translate(-50%, -50%) scale(${pupilScale})`;
-            }
-            
-            document.addEventListener('mousemove', trackMouse);
-        }
-
-        // Eye click functionality
-        document.getElementById('eye-container').addEventListener('click', function() {
-            const eye = document.getElementById('eye');
-            const iris = document.getElementById('iris');
-            const highlight = document.getElementById('highlight');
-            const eyeText = document.getElementById('eye-text');
-            
-            if (!eyeAwake) {
-                // First click - awaken the eye
-                eyeAwake = true;
-                eye.classList.remove('dormant');
-                eye.classList.add('awakening');
-                iris.classList.add('awakening');
-                highlight.classList.add('awakening');
-                
-                // Update text
-                eyeText.textContent = 'click me again';
-                eyeText.classList.add('awake');
-                
-                // Play awakening sound
-                playEyeAwakenSound();
-                
-                return; // Don't proceed to opening yet
-            }
-            
-            // Second click - open the eye and show content
-            eyeTrackingActive = false;
-            
-            // Hide text
-            eyeText.style.opacity = '0';
-            
-            // Play eye opening sound
-            playEyeOpenSound();
-            
-            // Animate eye opening
-            eye.classList.add('opening');
-            
-            // Hide eye and show main content after animation
-            setTimeout(() => {
-                document.getElementById('eye-container').classList.add('hidden');
-                document.getElementById('main-content').classList.add('visible');
-            }, 1500);
-        });
-
-        // Custom cursor and mouse tracking
-        function initializeCursor() {
-            const cursor = document.getElementById('cursor');
-            const trails = [];
-            const trailCount = 12;
-            
-            // Create cursor trails
-            for (let i = 0; i < trailCount; i++) {
-                const trail = document.createElement('div');
-                trail.className = 'cursor-trail';
-                document.body.appendChild(trail);
-                trails.push({
-                    element: trail,
-                    x: 0,
-                    y: 0,
-                    targetX: 0,
-                    targetY: 0
-                });
-            }
-            
-            let mouseX = 0;
-            let mouseY = 0;
-            
-            // Mouse movement handler
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                
-                // Update cursor position with slight offset
-                cursor.style.left = (mouseX - 8) + 'px';
-                cursor.style.top = (mouseY - 8) + 'px';
-            });
-            
-            // Animate cursor trails
-            function animateTrails() {
-                trails.forEach((trail, index) => {
-                    const delay = (index + 1) * 0.08;
-                    trail.targetX = mouseX - 4;
-                    trail.targetY = mouseY - 4;
-                    
-                    trail.x += (trail.targetX - trail.x) * (0.4 - delay);
-                    trail.y += (trail.targetY - trail.y) * (0.4 - delay);
-                    
-                    trail.element.style.left = trail.x + 'px';
-                    trail.element.style.top = trail.y + 'px';
-                    
-                    // Gradient opacity for smoother trails
-                    const opacity = Math.pow((trailCount - index) / trailCount, 1.5) * 0.7;
-                    trail.element.style.opacity = opacity;
-                });
-                
-                requestAnimationFrame(animateTrails);
-            }
-            
-            animateTrails();
-
-            // Link hover effects
-            document.querySelectorAll('a').forEach(link => {
-                link.addEventListener('mouseenter', () => {
-                    cursor.style.transform = 'scale(1.5)';
-                    cursor.style.background = 'rgba(255, 255, 255, 1)';
-                    cursor.style.borderColor = 'rgba(0, 0, 0, 1)';
-                    cursor.style.boxShadow = `
-                        0 0 12px rgba(255, 255, 255, 0.8),
-                        0 0 24px rgba(255, 255, 255, 0.5)
-                    `;
-                    
-                    // Play hover sound
-                    playHoverSound();
-                });
-                
-                link.addEventListener('mouseleave', () => {
-                    cursor.style.transform = 'scale(1)';
-                    cursor.style.background = 'rgba(255, 255, 255, 0.9)';
-                    cursor.style.borderColor = 'rgba(0, 0, 0, 0.8)';
-                    cursor.style.boxShadow = `
-                        0 0 8px rgba(255, 255, 255, 0.6),
-                        0 0 16px rgba(255, 255, 255, 0.3)
-                    `;
-                });
-            });
-        }
-
-        // Audio feedback functions
-        function playEyeAwakenSound() {
-            if (!isAudioEnabled || !audioContext) return;
-            
-            // Create ethereal awakening sound with reverb-like effect
-            const oscillator1 = audioContext.createOscillator();
-            const oscillator2 = audioContext.createOscillator();
-            const oscillator3 = audioContext.createOscillator();
-            const gainNode1 = audioContext.createGain();
-            const gainNode2 = audioContext.createGain();
-            const gainNode3 = audioContext.createGain();
-            
-            oscillator1.connect(gainNode1);
-            oscillator2.connect(gainNode2);
-            oscillator3.connect(gainNode3);
-            gainNode1.connect(audioContext.destination);
-            gainNode2.connect(audioContext.destination);
-            gainNode3.connect(audioContext.destination);
-            
-            // Base ethereal tone
-            oscillator1.frequency.value = 220;
-            oscillator1.type = 'sine';
-            
-            // Harmonic
-            oscillator2.frequency.value = 330;
-            oscillator2.type = 'triangle';
-            
-            // High sparkle
-            oscillator3.frequency.value = 880;
-            oscillator3.type = 'sine';
-            
-            // Base tone
-            gainNode1.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode1.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 0.3);
-            gainNode1.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1.2);
-            
-            // Harmonic
-            gainNode2.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode2.gain.linearRampToValueAtTime(0.015, audioContext.currentTime + 0.2);
-            gainNode2.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1.0);
-            
-            // Sparkle
-            gainNode3.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode3.gain.linearRampToValueAtTime(0.008, audioContext.currentTime + 0.1);
-            gainNode3.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.8);
-            
-            oscillator1.start(audioContext.currentTime);
-            oscillator1.stop(audioContext.currentTime + 1.3);
-            oscillator2.start(audioContext.currentTime + 0.1);
-            oscillator2.stop(audioContext.currentTime + 1.1);
-            oscillator3.start(audioContext.currentTime + 0.2);
-            oscillator3.stop(audioContext.currentTime + 0.9);
-        }
-
-        function playEyeOpenSound() {
-            if (!isAudioEnabled || !audioContext) return;
-            
-            // Create ethereal opening sound with cascading tones
-            const oscillators = [];
-            const gainNodes = [];
-            const frequencies = [165, 220, 330, 440, 660];
-            
-            frequencies.forEach((freq, index) => {
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-                
-                osc.connect(gain);
-                gain.connect(audioContext.destination);
-                
-                osc.frequency.value = freq;
-                osc.type = index < 2 ? 'sine' : 'triangle';
-                
-                const startTime = audioContext.currentTime + (index * 0.1);
-                const peakTime = startTime + 0.2;
-                const endTime = startTime + 1.5 - (index * 0.1);
-                
-                gain.gain.setValueAtTime(0, startTime);
-                gain.gain.linearRampToValueAtTime(0.02 - (index * 0.003), peakTime);
-                gain.gain.linearRampToValueAtTime(0, endTime);
-                
-                osc.start(startTime);
-                osc.stop(endTime);
-                
-                oscillators.push(osc);
-                gainNodes.push(gain);
-            });
-        }
-
-        function playClickSound() {
-            if (!isAudioEnabled || !audioContext) return;
-            
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = 200;
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 0.08);
-            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.6);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.65);
-        }
-
-        function playHoverSound() {
-            if (!isAudioEnabled || !audioContext) return;
-            
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = 150;
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
-            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.35);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.4);
-        }
-
-        // Discord copy functionality
-        document.getElementById('discord-link').addEventListener('click', function(event) {
-            event.preventDefault();
-            
-            const textToCopy = '4t88';
-            const tempTextArea = document.createElement('textarea');
-            tempTextArea.value = textToCopy;
-            document.body.appendChild(tempTextArea);
-            tempTextArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempTextArea);
-            const popup = document.getElementById('copy-popup');
-            popup.classList.add('show');
-            setTimeout(() => {
-                popup.classList.remove('show');
-            }, 2000);
-        });
-
-        // Add click sounds to all links
-        document.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', playClickSound);
-        });
-
-        // Start the loading and background
-        initializeBackground();
-        startLoading();
     </script>
 </body>
 </html>
