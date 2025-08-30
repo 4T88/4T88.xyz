@@ -3,7 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4T88 - Contact</title>
+    <title>4T88.xyz</title>
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://4t88.xyz/">
+    <meta property="og:title" content="4T88.xyz">
+    <meta property="og:description" content="4T88's website">
+    <meta property="og:site_name" content="4T88.xyz">
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:url" content="https://4t88.xyz/">
+    <meta property="twitter:title" content="4T88.xyz">
+    <meta property="twitter:description" content="4T88's website">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    
     <style>
         * {
             margin: 0;
@@ -13,509 +26,162 @@
 
         body {
             font-family: 'Courier New', monospace;
-            background: #0a0a0a;
+            background: #1a1a1a;
+            color: #fff;
             min-height: 100vh;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
             position: relative;
-            color: #ffffff;
-        }
-
-        .grid-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.03;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 1;
         }
 
         .container {
-            position: fixed;
-            width: 100vw;
-            height: 100vh;
+            text-align: center;
+            max-width: 400px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            z-index: 10;
         }
 
-        .center-name {
-            font-size: 4.5rem;
-            font-weight: bold;
-            color: #ffffff;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            user-select: none;
-            position: relative;
-            z-index: 20;
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            font-weight: normal;
             letter-spacing: 2px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
 
-        .center-name:hover {
+        h1:hover {
             transform: scale(1.05);
-            color: #f5f5f5;
         }
 
-        .center-name.expanded {
-            transform: scale(0.85);
+        h1.expanded {
+            transform: scale(0.8);
             opacity: 0.7;
         }
 
-        .neural-links {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 15;
+        .hint {
+            font-size: 0.8rem;
+            color: #555;
+            margin-bottom: 2rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .hint.hide {
             opacity: 0;
-            transition: opacity 0.6s ease;
         }
 
-        .neural-links.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .neural-node {
+        .links {
+            list-style: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
             position: absolute;
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: all;
-            backdrop-filter: blur(10px);
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
         }
 
-        .neural-node:hover {
-            transform: scale(1.2);
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.3);
+        .links.show {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .neural-node img {
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
-            filter: brightness(0.9);
+        .links li {
+            margin: 1rem 0;
+            transform: translateY(20px);
+            opacity: 0;
             transition: all 0.3s ease;
         }
 
-        .neural-node:hover img {
-            filter: brightness(1.1);
-            transform: scale(1.1);
-        }
-
-        .neural-node.pulse {
-            animation: subtlePulse 3s ease-in-out infinite;
-        }
-
-        @keyframes subtlePulse {
-            0%, 100% {
-                border-color: rgba(255, 255, 255, 0.15);
-                background: rgba(255, 255, 255, 0.08);
-            }
-            50% {
-                border-color: rgba(255, 255, 255, 0.25);
-                background: rgba(255, 255, 255, 0.12);
-            }
-        }
-
-        .info-panel {
-            position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-80px);
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 16px 24px;
-            backdrop-filter: blur(20px);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 25;
-            pointer-events: none;
-            max-width: 320px;
-        }
-
-        .info-panel.visible {
+        .links.show li {
+            transform: translateY(0);
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
         }
 
-        .info-title {
-            color: #ffffff;
-            font-size: 1rem;
-            font-weight: bold;
-            margin-bottom: 4px;
+        .links.show li:nth-child(1) { transition-delay: 0.1s; }
+        .links.show li:nth-child(2) { transition-delay: 0.2s; }
+        .links.show li:nth-child(3) { transition-delay: 0.3s; }
+        .links.show li:nth-child(4) { transition-delay: 0.4s; }
+        .links.show li:nth-child(5) { transition-delay: 0.5s; }
+
+        .links a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.2s ease;
+            display: block;
+            padding: 0.5rem 0;
         }
 
-        .info-desc {
-            color: #cccccc;
-            font-size: 0.85rem;
-            line-height: 1.3;
-        }
-
-        .connections-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        @keyframes expandRing {
-            0% {
-                transform: scale(1);
-                opacity: 0.6;
-            }
-            100% {
-                transform: scale(2.5);
-                opacity: 0;
-            }
-        }
-
-        .activation-ring {
-            animation: expandRing 0.5s ease-out forwards;
+        .links a:hover {
+            color: #fff;
         }
 
         @media (max-width: 768px) {
-            .center-name {
-                font-size: 3rem;
-                letter-spacing: 1px;
+            h1 {
+                font-size: 2.5rem;
             }
             
-            .neural-node {
-                width: 60px;
-                height: 60px;
-            }
-            
-            .neural-node img {
-                width: 24px;
-                height: 24px;
-            }
-            
-            .info-panel {
-                max-width: 280px;
-                margin: 0 20px;
+            .links a {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="grid-bg"></div>
-    <canvas class="connections-canvas" id="connections"></canvas>
-
     <div class="container">
-        <div class="center-name" id="centerName">4T88</div>
-    </div>
-
-    <div class="neural-links" id="neuralLinks"></div>
-    <div class="info-panel" id="infoPanel">
-        <div class="info-title" id="infoTitle"></div>
-        <div class="info-desc" id="infoDesc"></div>
+        <h1 id="name">4T88</h1>
+        <div class="hint" id="hint">(click me)</div>
+        <ul class="links" id="links">
+            <li><a href="https://github.com/4T88" target="_blank">github</a></li>
+            <li><a href="https://t.me/i4T88" target="_blank">telegram</a></li>
+            <li><a href="mailto:contact@4t88.xyz">email</a></li>
+            <li><a href="#" onclick="copyDiscord()">discord</a></li>
+            <li><a href="https://signal.me/#eu/T480001" target="_blank">signal</a></li>
+        </ul>
     </div>
 
     <script>
-        class ContactSystem {
-            constructor() {
-                this.centerName = document.getElementById('centerName');
-                this.neuralLinks = document.getElementById('neuralLinks');
-                this.infoPanel = document.getElementById('infoPanel');
-                this.infoTitle = document.getElementById('infoTitle');
-                this.infoDesc = document.getElementById('infoDesc');
-                
-                this.isExpanded = false;
-                this.nodes = [];
-                
-                this.connectionsCanvas = document.getElementById('connections');
-                this.connectionsCtx = this.connectionsCanvas.getContext('2d');
-                this.animationFrame = null;
-                
-                this.socialLinks = [
-                    { 
-                        id: 'telegram', 
-                        favicon: 'data:image/svg+xml,%3Csvg fill=%22%23dadada%22 viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22m20.665 3.717-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15 4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z%22/%3E%3C/svg%3E',
-                        title: 'telegram',
-                        desc: 'hit me up for quick chats - @t480001',
-                        action: () => window.open('https://t.me/T480001', '_blank')
-                    },
-                    { 
-                        id: 'github', 
-                        favicon: 'data:image/svg+xml,%3Csvg viewBox=%220 0 24 24%22 fill=%22%23dadada%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z%22/%3E%3C/svg%3E',
-                        title: 'github',
-                        desc: 'check out my code and projects - /4t88',
-                        action: () => window.open('https://github.com/4T88', '_blank')
-                    },
-                    { 
-                        id: 'discord', 
-                        favicon: 'data:image/svg+xml,%3Csvg viewBox=%220 0 24 24%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M18.8944 4.34399C17.5184 3.71467 16.057 3.256 14.5317 3C14.3397 3.33067 14.1263 3.77866 13.977 4.13067C12.3546 3.89599 10.7439 3.89599 9.14394 4.13067C8.9946 3.77866 8.77059 3.33067 8.58925 3C7.05328 3.256 5.59194 3.71467 4.22555 4.34399C1.46289 8.41865 0.716219 12.3973 1.08955 16.3226C2.92421 17.6559 4.6949 18.4666 6.43463 19C6.86129 18.424 7.2453 17.8053 7.57597 17.1546C6.94663 16.92 6.3493 16.632 5.7733 16.2906C5.92263 16.184 6.07197 16.0667 6.21064 15.9493C9.68796 17.5387 13.4544 17.5387 16.889 15.9493C17.0383 16.0667 17.177 16.184 17.3263 16.2906C16.7503 16.632 16.153 16.92 15.5237 17.1546C15.8543 17.8053 16.2384 18.424 16.665 19C18.4037 18.4666 20.185 17.6559 22.0101 16.3226C22.4687 11.7787 21.2837 7.83202 18.8944 4.34399ZM8.05596 13.9013C7.01061 13.9013 6.15728 12.952 6.15728 11.7893C6.15728 10.6267 6.98928 9.67731 8.05596 9.67731C9.11194 9.67731 9.97591 10.6267 9.95457 11.7893C9.95457 12.952 9.11194 13.9013 8.05596 13.9013ZM15.065 13.9013C14.0197 13.9013 13.1653 12.952 13.1653 11.7893C13.1653 10.6267 13.9983 9.67731 15.065 9.67731C16.121 9.67731 16.985 10.6267 16.9637 11.7893C16.9637 12.952 16.1317 13.9013 15.065 13.9013Z%22 fill=%22%23dadada%22/%3E%3C/svg%3E',
-                        title: 'discord',
-                        desc: 'gaming and random chats - 4t88',
-                        action: () => this.copyToClipboard('4t88')
-                    },
-                    { 
-                        id: 'signal', 
-                        favicon: 'data:image/svg+xml,%3Csvg fill=%22%23dadada%22 viewBox=%220 0 32 32%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M16 3.816c-6.726 0.004-12.178 5.457-12.178 12.184 0 2.404 0.696 4.645 1.897 6.533l-0.029-0.049-1.172 4.999 4.999-1.172c1.841 1.176 4.086 1.874 6.493 1.874 6.729 0 12.184-5.455 12.184-12.184s-5.455-12.184-12.184-12.184c-0.004 0-0.007 0-0.011 0h0.001z%22/%3E%3C/svg%3E',
-                        title: 'signal',
-                        desc: 'for the really private stuff',
-                        action: () => window.open('https://signal.me/#eu/T480001', '_blank')
-                    },
-                    { 
-                        id: 'email', 
-                        favicon: 'data:image/svg+xml,%3Csvg viewBox=%220 0 24 24%22 fill=%22%23dadada%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z%22/%3E%3C/svg%3E',
-                        title: 'email',
-                        desc: 'old school but works - contact@4t88.xyz',
-                        action: () => window.open('mailto:contact@4t88.xyz', '_blank')
-                    }
-                ];
-                
-                this.init();
+        const name = document.getElementById('name');
+        const links = document.getElementById('links');
+        const hint = document.getElementById('hint');
+        let isExpanded = false;
+
+        name.addEventListener('click', () => {
+            if (!isExpanded) {
+                name.classList.add('expanded');
+                links.classList.add('show');
+                hint.classList.add('hide');
+                isExpanded = true;
+            } else {
+                name.classList.remove('expanded');
+                links.classList.remove('show');
+                hint.classList.remove('hide');
+                isExpanded = false;
             }
+        });
 
-            init() {
-                this.setupCanvas();
-                this.bindEvents();
-            }
-
-            setupCanvas() {
-                const resize = () => {
-                    this.connectionsCanvas.width = window.innerWidth;
-                    this.connectionsCanvas.height = window.innerHeight;
-                };
-                resize();
-                window.addEventListener('resize', resize);
-            }
-
-            bindEvents() {
-                this.centerName.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    this.toggleNetwork();
-                });
-
-                document.addEventListener('click', (e) => {
-                    if (this.isExpanded && !e.target.closest('.neural-node') && e.target !== this.centerName) {
-                        this.closeNetwork();
-                    }
-                });
-            }
-
-            toggleNetwork() {
-                if (this.isExpanded) {
-                    this.closeNetwork();
-                } else {
-                    this.openNetwork();
-                }
-            }
-
-            openNetwork() {
-                this.isExpanded = true;
-                this.centerName.classList.add('expanded');
-                
-                this.createNodes();
-                
-                setTimeout(() => {
-                    this.neuralLinks.classList.add('active');
-                    this.startAnimation();
-                }, 200);
-            }
-
-            closeNetwork() {
-                this.isExpanded = false;
-                this.centerName.classList.remove('expanded');
-                this.neuralLinks.classList.remove('active');
-                this.infoPanel.classList.remove('visible');
-                
-                this.stopAnimation();
-                
-                setTimeout(() => {
-                    this.neuralLinks.innerHTML = '';
-                    this.nodes = [];
-                }, 300);
-            }
-
-            createNodes() {
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2;
-                const radius = Math.min(window.innerWidth, window.innerHeight) * 0.28;
-                
-                this.socialLinks.forEach((link, index) => {
-                    const angle = (index * 2 * Math.PI) / this.socialLinks.length - Math.PI / 2;
-                    const x = centerX + Math.cos(angle) * radius - 36;
-                    const y = centerY + Math.sin(angle) * radius - 36;
-                    
-                    const node = document.createElement('div');
-                    node.className = 'neural-node pulse';
-                    node.style.left = x + 'px';
-                    node.style.top = y + 'px';
-                    node.style.animationDelay = (index * 0.2) + 's';
-                    
-                    const icon = document.createElement('img');
-                    icon.src = link.favicon;
-                    icon.alt = link.id;
-                    icon.onerror = () => { icon.style.display = 'none'; };
-                    
-                    node.appendChild(icon);
-                    
-                    node.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        this.activateNode(node, link);
-                    });
-                    
-                    node.addEventListener('mouseenter', () => {
-                        this.showInfo(link);
-                    });
-                    
-                    node.addEventListener('mouseleave', () => {
-                        this.hideInfo();
-                    });
-                    
-                    this.neuralLinks.appendChild(node);
-                    
-                    this.nodes.push({
-                        element: node,
-                        x: x + 36,
-                        y: y + 36,
-                        link: link
-                    });
-                });
-            }
-
-            activateNode(nodeElement, link) {
-                const ring = document.createElement('div');
-                ring.style.cssText = `
-                    position: fixed;
-                    left: ${nodeElement.offsetLeft}px;
-                    top: ${nodeElement.offsetTop}px;
-                    width: 72px;
-                    height: 72px;
-                    border: 2px solid rgba(255, 255, 255, 0.6);
-                    border-radius: 50%;
-                    pointer-events: none;
-                    z-index: 30;
-                `;
-                ring.className = 'activation-ring';
-                
-                document.body.appendChild(ring);
-                
-                setTimeout(() => {
-                    ring.remove();
-                    link.action();
-                }, 250);
-            }
-
-            showInfo(link) {
-                this.infoTitle.textContent = link.title;
-                this.infoDesc.textContent = link.desc;
-                this.infoPanel.classList.add('visible');
-            }
-
-            hideInfo() {
-                this.infoPanel.classList.remove('visible');
-            }
-
-            startAnimation() {
-                const animate = () => {
-                    if (!this.isExpanded) return;
-                    
-                    this.connectionsCtx.clearRect(0, 0, this.connectionsCanvas.width, this.connectionsCanvas.height);
-                    this.drawConnections();
-                    
-                    this.animationFrame = requestAnimationFrame(animate);
-                };
-                animate();
-            }
-
-            stopAnimation() {
-                if (this.animationFrame) {
-                    cancelAnimationFrame(this.animationFrame);
-                    this.animationFrame = null;
-                }
-                this.connectionsCtx.clearRect(0, 0, this.connectionsCanvas.width, this.connectionsCanvas.height);
-            }
-
-            drawConnections() {
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2;
-                
-                this.nodes.forEach((node) => {
-                    this.connectionsCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-                    this.connectionsCtx.lineWidth = 1;
-                    this.connectionsCtx.beginPath();
-                    this.connectionsCtx.moveTo(centerX, centerY);
-                    this.connectionsCtx.lineTo(node.x, node.y);
-                    this.connectionsCtx.stroke();
-                });
-            }
-
-            copyToClipboard(text) {
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(text).then(() => {
-                        this.showNotification('discord username copied');
-                    });
-                } else {
-                    const textArea = document.createElement('textarea');
-                    textArea.value = text;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    this.showNotification('discord username copied');
-                }
-            }
-
-            showNotification(message) {
-                const notification = document.createElement('div');
-                notification.textContent = message;
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: rgba(0, 0, 0, 0.9);
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    color: #ffffff;
-                    padding: 12px 18px;
-                    border-radius: 6px;
-                    backdrop-filter: blur(10px);
-                    font-family: 'Courier New', monospace;
-                    font-size: 0.9rem;
-                    z-index: 1000;
-                    transform: translateX(100%);
-                    transition: transform 0.3s ease;
-                    text-transform: lowercase;
-                `;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.style.transform = 'translateX(0)';
-                }, 100);
-                
-                setTimeout(() => {
-                    notification.style.transform = 'translateX(100%)';
-                    setTimeout(() => notification.remove(), 300);
-                }, 2500);
+        function copyDiscord() {
+            const text = '4t88';
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text);
+            } else {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
             }
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            new ContactSystem();
-        });
     </script>
 </body>
 </html>
